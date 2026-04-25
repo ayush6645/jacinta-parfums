@@ -39,21 +39,46 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="pt-20 lg:pt-0 min-h-screen bg-luxury-black">
-      <div className="flex flex-col lg:flex-row min-h-screen">
+    <div className="pt-16 lg:pt-0 min-h-screen bg-luxury-black">
+      {/* BRAND IDENTITY HEADER (AS REQUESTED BY USER) */}
+      <div className="relative w-full py-8 md:py-12 flex flex-col items-center justify-center overflow-hidden border-b border-gold/5 bg-luxury-black">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/Images/WhatsApp Image 2026-04-13 at 2.06.36 PM.jpeg" 
+            alt="Brand Background" 
+            className="w-full h-full object-cover opacity-5 blur-xl scale-125"
+          />
+        </div>
+        <div className="relative z-10 text-center px-6">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <h2 className="text-gold text-[8px] md:text-[10px] tracking-[0.6em] uppercase font-bold mb-2">
+              The Art of Olfaction
+            </h2>
+            <h1 className="text-luxury-white text-3xl md:text-5xl font-serif italic tracking-tighter leading-tight animate-gold-glow">
+              Jacinta <span className="not-italic text-gold/80">Atelier</span>
+            </h1>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-140px)]">
         {/* Left: Image Gallery */}
-        <div className="w-full lg:w-1/2 relative bg-black/40 overflow-hidden group flex items-center justify-center p-12">
-          <Link to="/collections" className="absolute top-12 left-12 z-20 flex items-center gap-2 text-luxury-white/60 hover:text-gold transition-colors group/back no-flow">
-            <ArrowLeft size={16} className="group-hover/back:-translate-x-1 transition-transform" />
-            <span className="text-[10px] uppercase tracking-widest font-bold">Back</span>
+        <div className="w-full lg:w-1/2 relative bg-black/20 overflow-hidden group flex items-center justify-center p-6 md:p-12">
+          <Link to="/collections" className="absolute top-8 left-8 z-20 flex items-center gap-2 text-luxury-white/60 hover:text-gold transition-colors group/back no-flow">
+            <ArrowLeft size={14} className="group-hover/back:-translate-x-1 transition-transform" />
+            <span className="text-[9px] uppercase tracking-widest font-bold">Back</span>
           </Link>
           
-          <div className="w-full h-full flex items-center justify-center relative">
+          <div className="w-full h-full flex items-center justify-center relative min-h-[400px] md:min-h-[600px]">
             <ImageSwiper 
               images={product.images || product.image} 
-              cardWidth={450} 
-              cardHeight={550}
-              className="mt-8"
+              cardWidth={window.innerWidth < 768 ? window.innerWidth * 0.8 : 450} 
+              cardHeight={window.innerWidth < 768 ? window.innerWidth * 1.0 : 550}
+              className="mt-4"
             />
           </div>
         </div>
