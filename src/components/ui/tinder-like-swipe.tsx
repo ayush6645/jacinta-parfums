@@ -125,7 +125,7 @@ export function SwipeableCardStack({
                                 position: "absolute", 
                                 width: "100%", 
                                 height: "100%", 
-                                backgroundImage: `url(${image})`, 
+                                backgroundImage: `url("${image}")`, 
                                 backgroundSize: "cover", 
                                 backgroundPosition: "center", 
                                 borderRadius, 
