@@ -22,8 +22,9 @@ export default function Hero() {
         <img 
           src="/Images/WhatsApp Image 2026-04-13 at 2.06.36 PM.jpeg" 
           alt="Brand Background" 
-          className="w-full h-full object-cover opacity-10 scale-125 blur-[2px] lg:blur-none"
+          className="w-full h-full object-cover opacity-10 scale-125 blur-[2px] lg:blur-none animate-slow-zoom"
         />
+
       </div>
 
       <div className="container mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center z-30">
@@ -33,9 +34,10 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6 block lg:hidden"
           >
-            <h2 className="text-gold text-[12px] tracking-[1em] uppercase font-black mb-3">Jacinta</h2>
+            <h2 className="text-gold text-[12px] tracking-[1em] uppercase font-black mb-3 animate-gold-glow">Jacinta</h2>
             <div className="w-24 h-[1px] bg-gold/50 mx-auto"></div>
           </motion.div>
+
 
           <motion.span 
             initial={{ opacity: 0, y: 20 }}
