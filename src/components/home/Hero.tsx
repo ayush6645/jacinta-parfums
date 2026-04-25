@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import InteractiveHoverButton from '../ui/interactive-hover-button';
-import { SwipeableCardStack } from '../ui/tinder-like-swipe';
+import RuixenCarouselWave from '../ui/ruixen-carousel-wave';
 
 export default function Hero() {
   return (
@@ -24,7 +24,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2 }}
-          className="mb-12"
+          className="mb-8"
         >
           <h2 className="text-gold text-[10px] md:text-xs tracking-[0.8em] uppercase font-bold mb-4">
             The Art of Olfaction
@@ -34,32 +34,9 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* HERO PRODUCT (THE CINEMATIC STACK) */}
-        <div className="relative w-full max-w-[320px] md:max-w-[420px] h-[450px] md:h-[550px] mt-8 group">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full h-full"
-          >
-            <SwipeableCardStack 
-              images={[
-                '/Images/WhatsApp Image 2026-04-13 at 2.06.56 PM.jpeg',
-                '/Images/WhatsApp Image 2026-04-22 at 10.18.57 AM.jpeg',
-                '/Images/WhatsApp Image 2026-04-22 at 10.19.07 AM.jpeg',
-                '/Images/WhatsApp Image 2026-04-22 at 10.18.12 AM.jpeg',
-                '/Images/WhatsApp Image 2026-04-22 at 10.20.18 AM.jpeg',
-                '/Images/WhatsApp Image 2026-04-13 at 2.06.36 PM.jpeg'
-              ]}
-              borderRadius={24}
-              autoSwipeInterval={4000}
-              rightIcon="https://uploads-ssl.webflow.com/6226162356726c4835057a73/6232367c3761286ddff6004c_icon-like.svg"
-              leftIcon="https://uploads-ssl.webflow.com/6226162356726c4835057a73/6232367c825de783a6697a3c_icon-dislike.svg"
-            />
-          </motion.div>
-          
-          {/* Decorative Glow */}
-          <div className="absolute -inset-10 bg-gold/10 blur-[100px] -z-10 rounded-full animate-pulse"></div>
+        {/* HERO PRODUCT (THE CINEMATIC WAVE) */}
+        <div className="w-full max-w-6xl">
+          <RuixenCarouselWave />
         </div>
 
         {/* ACTION & SCROLL */}
