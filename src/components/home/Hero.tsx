@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import InteractiveHoverButton from '../ui/interactive-hover-button';
+import { SwipeableCardStack } from '../ui/tinder-like-swipe';
 
 export default function Hero() {
   return (
@@ -33,37 +34,32 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* HERO PRODUCT (THE SIGNATURE BOTTLE) */}
-        <div className="relative w-full max-w-[320px] md:max-w-[500px] group">
+        {/* HERO PRODUCT (THE CINEMATIC STACK) */}
+        <div className="relative w-full max-w-[320px] md:max-w-[420px] h-[450px] md:h-[550px] mt-8 group">
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 aspect-[3/4] flex items-center justify-center overflow-hidden rounded-lg border border-gold/10 bg-luxury-dark/40 shadow-[0_0_80px_rgba(0,0,0,0.6)]"
+            className="relative z-10 w-full h-full"
           >
-            <img 
-              src="/Images/WhatsApp Image 2026-04-13 at 2.06.56 PM.jpeg" 
-              alt="Noir Libre Signature" 
-              className="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-2000"
+            <SwipeableCardStack 
+              images={[
+                '/Images/WhatsApp Image 2026-04-13 at 2.06.56 PM.jpeg',
+                '/Images/WhatsApp Image 2026-04-22 at 10.18.57 AM.jpeg',
+                '/Images/WhatsApp Image 2026-04-22 at 10.19.07 AM.jpeg',
+                '/Images/WhatsApp Image 2026-04-22 at 10.18.12 AM.jpeg',
+                '/Images/WhatsApp Image 2026-04-22 at 10.20.18 AM.jpeg',
+                '/Images/WhatsApp Image 2026-04-13 at 2.06.36 PM.jpeg'
+              ]}
+              borderRadius={24}
+              autoSwipeInterval={4000}
+              rightIcon="https://uploads-ssl.webflow.com/6226162356726c4835057a73/6232367c3761286ddff6004c_icon-like.svg"
+              leftIcon="https://uploads-ssl.webflow.com/6226162356726c4835057a73/6232367c825de783a6697a3c_icon-dislike.svg"
             />
-            
-            {/* Soft Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/80 via-transparent to-transparent"></div>
-            
-            {/* Minimal Info Overlay */}
-            <div className="absolute bottom-8 left-0 right-0 px-6 flex justify-between items-end">
-              <div className="text-left">
-                <span className="text-[8px] text-gold uppercase tracking-[0.3em] font-bold block mb-1">Fragrance Noir</span>
-                <h3 className="text-xl font-serif italic text-luxury-white">Noir Libre</h3>
-              </div>
-              <div className="text-right">
-                <span className="text-lg font-serif text-gold">₹4,499</span>
-              </div>
-            </div>
           </motion.div>
           
           {/* Decorative Glow */}
-          <div className="absolute -inset-4 bg-gold/5 blur-3xl -z-10 rounded-full animate-pulse"></div>
+          <div className="absolute -inset-10 bg-gold/10 blur-[100px] -z-10 rounded-full animate-pulse"></div>
         </div>
 
         {/* ACTION & SCROLL */}
