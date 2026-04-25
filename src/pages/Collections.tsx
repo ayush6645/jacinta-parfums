@@ -32,25 +32,28 @@ export default function CollectionsPage() {
             Our Collections
           </motion.h1>
           
-          <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 border-y border-gold/10 py-6">
-            <div className="flex items-center gap-2 text-gold/60 mr-4">
+          <div className="flex items-center gap-4 border-y border-gold/10 py-6 overflow-x-auto no-scrollbar scroll-smooth">
+            <div className="flex items-center gap-2 text-gold/60 mr-4 shrink-0">
               <Filter size={14} />
               <span className="text-[10px] uppercase tracking-widest font-bold">Filter By</span>
             </div>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] font-bold transition-all border ${
-                  activeCategory === cat 
-                    ? 'border-gold text-gold bg-gold/5' 
-                    : 'border-gold/10 text-luxury-white/40 hover:text-luxury-white hover:border-gold/30'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            <div className="flex gap-4">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-6 py-2 text-[10px] uppercase tracking-[0.2em] font-bold transition-all border whitespace-nowrap ${
+                    activeCategory === cat 
+                      ? 'border-gold text-gold bg-gold/5' 
+                      : 'border-gold/10 text-luxury-white/40 hover:text-luxury-white hover:border-gold/30'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
+
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

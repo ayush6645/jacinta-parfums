@@ -19,12 +19,14 @@ interface AppStore {
   cart: CartItem[];
   wishlist: string[];
   user: User;
+  theme: 'light' | 'dark';
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   toggleWishlist: (id: string) => void;
   clearCart: () => void;
   setUser: (user: Partial<User>) => void;
   logout: () => void;
+  toggleTheme: () => void;
 }
 
 
@@ -36,6 +38,7 @@ export const useStore = create<AppStore>((set) => ({
     email: '',
     isLoggedIn: false
   },
+  theme: 'dark',
   addToCart: (item) => set((state) => {
     const existing = state.cart.find((i) => i.id === item.id && i.size === item.size);
     if (existing) {
@@ -64,5 +67,7 @@ export const useStore = create<AppStore>((set) => ({
   logout: () => set({
     user: { name: '', email: '', isLoggedIn: false }
   }),
+  toggleTheme: () => set((state) => ({
+    theme: state.theme === 'dark' ? 'light' : 'dark'
+  })),
 }));
-

@@ -13,9 +13,10 @@ import ProfilePage from './pages/Profile';
 import AtelierPage from './pages/Atelier';
 import BespokePage from './pages/Bespoke';
 import { JacintaLoader } from './components/ui/jacinta-loader';
-
-
+import { useStore } from './store/useStore';
+import { cn } from './lib/utils';
 import { FlowButton } from './components/ui/flow-hover-button';
+
 
 
 
@@ -86,11 +87,28 @@ function LandingPage() {
 // Global animation imports
 import { motion } from 'motion/react';
 
+import { useEffect } from 'react';
+
 export default function App() {
+  const theme = useStore((state) => state.theme);
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light-theme');
+    } else {
+      document.documentElement.classList.remove('light-theme');
+    }
+  }, [theme]);
+
   return (
     <Router>
-      <div className="relative selection:bg-gold/30 selection:text-gold min-h-screen flex flex-col">
+      <div className={cn(
+        "relative selection:bg-gold/30 selection:text-gold min-h-screen flex flex-col transition-colors duration-700",
+        theme === 'light' ? 'light-theme' : ''
+      )}>
         <Navbar />
+
+
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<LandingPage />} />

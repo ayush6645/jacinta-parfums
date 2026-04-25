@@ -21,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       viewport={{ once: true }}
       className="group relative bg-luxury-dark/40 border border-gold/10 overflow-hidden"
     >
-      <Link to={`/product/${product.id}`} className="block aspect-[4/5] overflow-hidden bg-black">
+      <Link to={`/product/${product.id}`} className="block aspect-[4/5] overflow-hidden bg-luxury-black">
         <motion.img 
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.6 }}
@@ -33,8 +33,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       
       <button 
         onClick={() => toggleWishlist(product.id)}
-        className="absolute top-4 right-4 p-2 rounded-full border border-gold/20 bg-black/40 backdrop-blur-sm text-gold hover:bg-gold hover:text-black transition-all z-10 no-flow"
+        className="absolute top-4 right-4 p-2 rounded-full border border-gold/20 bg-card-bg backdrop-blur-sm text-gold hover:bg-gold hover:text-black transition-all z-10 no-flow"
       >
+
 
         <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
       </button>

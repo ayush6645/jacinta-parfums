@@ -25,7 +25,8 @@ const collections = [
 export default function CollectionPreview() {
   return (
     <section className="h-auto lg:h-[220px] bg-luxury-dark border-t border-gold/10 flex flex-col lg:flex-row shrink-0 overflow-hidden">
-      <div className="w-full lg:w-1/4 border-b lg:border-b-0 lg:border-r border-gold/10 p-8 flex flex-col justify-center bg-black/40">
+      <div className="w-full lg:w-1/4 border-b lg:border-b-0 lg:border-r border-gold/10 p-8 flex flex-col justify-center bg-card-bg">
+
         <h3 className="text-[10px] uppercase tracking-[0.3em] text-gold mb-2 font-bold italic">The Collection</h3>
         <p className="text-[11px] text-luxury-white/40 italic">Three distinct voices of the night.</p>
       </div>

@@ -7,14 +7,32 @@
   
   --color-gold: #C9A14A;
   --color-gold-hover: #B08A38;
-  --color-luxury-black: #0A0A0A;
-  --color-luxury-dark: #080808;
-  --color-luxury-white: #F5F5F5;
+  --color-luxury-black: var(--bg-primary);
+  --color-luxury-dark: var(--bg-secondary);
+  --color-luxury-white: var(--text-primary);
+}
+
+:root {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #080808;
+  --text-primary: #F5F5F5;
+  --text-secondary: rgba(245, 245, 245, 0.4);
+  --border-gold: rgba(201, 161, 74, 0.2);
+  --card-bg: rgba(10, 10, 10, 0.6);
+}
+
+.light-theme {
+  --bg-primary: #FCFAF7;
+  --bg-secondary: #F5F1E9;
+  --text-primary: #1A1A1A;
+  --text-secondary: rgba(26, 26, 26, 0.5);
+  --border-gold: rgba(201, 161, 74, 0.3);
+  --card-bg: rgba(255, 255, 255, 0.8);
 }
 
 @layer base {
   body {
-    @apply bg-luxury-black text-luxury-white font-sans antialiased;
+    @apply transition-colors duration-700 bg-luxury-black text-luxury-white font-sans antialiased;
   }
 }
 
@@ -37,16 +55,23 @@
     @apply text-black scale-105;
   }
 
+  /* Force white text in light mode for gold background */
+  .light-theme a:hover, .light-theme button:not(.no-flow):hover {
+    @apply text-white;
+  }
+
   a:active, button:not(.no-flow):active {
     @apply scale-95;
   }
 
-  /* Ensure text stands out on gold background */
   a:hover *, button:not(.no-flow):hover * {
     @apply text-black transition-colors duration-500;
   }
+
+  .light-theme a:hover *, .light-theme button:not(.no-flow):hover * {
+    @apply text-white;
+  }
   
-  /* Exclude logo and some icons if they shouldn't change color */
   .no-flow, .no-flow:hover, .no-flow::before {
     @apply scale-100 translate-x-0 translate-y-0 bg-transparent text-inherit;
     background-image: none !important;
@@ -55,7 +80,7 @@
 }
 
 .luxury-gradient {
-  background: linear-gradient(to left, #1A1108, transparent);
+  background: linear-gradient(to left, var(--bg-secondary), transparent);
 }
 
 .luxury-shadow {
@@ -66,7 +91,17 @@
   @apply bg-luxury-black/80 backdrop-blur-md border-b border-gold/20;
 }
 
-/* Custom scrollbar for luxury feel */
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -78,4 +113,3 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-gold/20 hover:bg-gold/40 transition-colors;
 }
-
