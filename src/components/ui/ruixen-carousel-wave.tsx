@@ -87,7 +87,7 @@ export default function RuixenCarouselWave() {
 
   return (
     <div className="h-full w-full relative px-4 py-8 overflow-hidden flex flex-col items-center">
-      <div className="relative flex items-center justify-center h-[450px] w-full max-w-4xl">
+      <div className="relative flex items-center justify-center h-[550px] w-full max-w-4xl">
         {cards.map((card, index) => (
           <div
             key={index}
@@ -103,7 +103,7 @@ export default function RuixenCarouselWave() {
                 className="relative block overflow-hidden rounded-[2rem] shadow-2xl border border-gold/10 bg-luxury-dark/40 backdrop-blur-xl transition-all duration-500"
               >
                 {/* Image */}
-                <div className="relative h-[320px] w-[240px] md:h-[400px] md:w-[300px]">
+                <div className="relative h-[380px] w-[280px] md:h-[480px] md:w-[360px]">
                   <img
                     src={card.image ?? ''}
                     alt={card.title ?? ''}
@@ -115,24 +115,24 @@ export default function RuixenCarouselWave() {
                 {/* Badge */}
                 {card.badge && (
                   <div className="absolute top-6 left-6">
-                    <div className="px-4 py-1 text-[8px] font-bold tracking-[0.3em] uppercase bg-gold/90 text-black shadow-lg rounded-full">
+                    <div className="px-3 py-0.5 text-[7px] font-bold tracking-[0.2em] uppercase bg-gold/90 text-black shadow-lg rounded-full">
                       {card.badge.text}
                     </div>
                   </div>
                 )}
 
-                {/* Text Overlay */}
-                <div className="absolute bottom-6 left-6 right-6 transform transition-all duration-500 bg-luxury-black/60 backdrop-blur-md rounded-2xl p-5 border border-gold/10 shadow-luxury">
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-lg font-serif italic text-luxury-white">
+                {/* Text Overlay - Smaller and Lower */}
+                <div className="absolute bottom-4 left-4 right-4 transform transition-all duration-500 bg-luxury-black/60 backdrop-blur-md rounded-xl p-3 border border-gold/10 shadow-luxury max-w-[85%] mx-auto">
+                  <div className="flex flex-col gap-0.5">
+                    <h3 className="text-sm font-serif italic text-luxury-white">
                       {card.title}
                     </h3>
-                    <p className="text-[10px] text-luxury-white/40 leading-snug tracking-wide uppercase">
+                    <p className="text-[9px] text-luxury-white/40 leading-tight tracking-wide uppercase line-clamp-1">
                       {card.subtitle}
                     </p>
-                    <div className="flex justify-end mt-2">
-                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gold/10 border border-gold/20 text-gold transition-all duration-300 hover:bg-gold hover:text-black">
-                        <ArrowUpRight className="w-4 h-4" />
+                    <div className="flex justify-end mt-1">
+                      <div className="w-6 h-6 flex items-center justify-center rounded-full bg-gold/10 border border-gold/20 text-gold transition-all duration-300 hover:bg-gold hover:text-black">
+                        <ArrowUpRight className="w-3 h-3" />
                       </div>
                     </div>
                   </div>
