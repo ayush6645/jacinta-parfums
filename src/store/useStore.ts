@@ -38,7 +38,7 @@ export const useStore = create<AppStore>((set) => ({
     email: '',
     isLoggedIn: false
   },
-  theme: 'dark',
+  theme: 'light',
   addToCart: (item) => set((state) => {
     const existing = state.cart.find((i) => i.id === item.id && i.size === item.size);
     if (existing) {

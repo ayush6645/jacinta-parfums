@@ -13,21 +13,21 @@
 }
 
 :root {
-  --bg-primary: #0A0A0A;
-  --bg-secondary: #080808;
-  --text-primary: #F5F5F5;
-  --text-secondary: rgba(245, 245, 245, 0.4);
-  --border-gold: rgba(201, 161, 74, 0.2);
-  --card-bg: rgba(10, 10, 10, 0.6);
-}
-
-.light-theme {
   --bg-primary: #FCFAF7;
   --bg-secondary: #F5F1E9;
   --text-primary: #1A1A1A;
   --text-secondary: rgba(26, 26, 26, 0.5);
   --border-gold: rgba(201, 161, 74, 0.3);
   --card-bg: rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #080808;
+  --text-primary: #F5F5F5;
+  --text-secondary: rgba(245, 245, 245, 0.4);
+  --border-gold: rgba(201, 161, 74, 0.2);
+  --card-bg: rgba(10, 10, 10, 0.6);
 }
 
 @layer base {

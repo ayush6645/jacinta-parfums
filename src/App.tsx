@@ -93,18 +93,18 @@ export default function App() {
   const theme = useStore((state) => state.theme);
 
   useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light-theme');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark-theme');
     } else {
-      document.documentElement.classList.remove('light-theme');
+      document.documentElement.classList.remove('dark-theme');
     }
   }, [theme]);
 
   return (
     <Router>
       <div className={cn(
-        "relative selection:bg-gold/30 selection:text-gold min-h-screen flex flex-col transition-colors duration-700",
-        theme === 'light' ? 'light-theme' : ''
+        "relative selection:bg-gold/30 selection:text-gold min-h-screen flex flex-col transition-colors duration-700 bg-luxury-black text-luxury-white",
+        theme === 'dark' ? 'dark-theme' : ''
       )}>
         <Navbar />
 
