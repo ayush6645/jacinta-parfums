@@ -58,8 +58,10 @@ export const JacintaLoader: React.FC<JacintaLoaderProps> = ({
         <div className="drop w-20 h-20 bottom-1/4 right-1/4 animate-[drop-flow_7s_infinite_ease-in-out_2s]" />
       </div>
       
-      <div className="absolute z-10 text-center">
-        <span className="text-[10px] tracking-[1em] uppercase text-gold/80 font-bold">Jacinta</span>
+      <div className="absolute z-20 text-center pointer-events-none">
+        <span className="text-[12px] md:text-sm tracking-[0.8em] uppercase text-luxury-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+          Jacinta
+        </span>
       </div>
     </div>
   );
