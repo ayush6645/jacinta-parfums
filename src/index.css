@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", "Montserrat", sans-serif;
+  
+  --color-gold: #C9A14A;
+  --color-gold-hover: #B08A38;
+  --color-luxury-black: #0A0A0A;
+  --color-luxury-dark: #080808;
+  --color-luxury-white: #F5F5F5;
+}
+
+@layer base {
+  body {
+    @apply bg-luxury-black text-luxury-white font-sans antialiased;
+  }
+}
+
+/* Global Flow Hover Animation */
+@layer components {
+  a, button:not(.no-flow) {
+    @apply relative overflow-hidden transition-all duration-500 z-0;
+  }
+
+  a::before, button:not(.no-flow)::before {
+    content: "";
+    @apply absolute inset-0 -z-10 translate-x-[150%] translate-y-[150%] scale-[2.5] rounded-[100%] bg-gold transition-transform duration-1000;
+  }
+
+  a:hover::before, button:not(.no-flow):hover::before {
+    @apply translate-x-0 translate-y-0;
+  }
+
+  a:hover, button:not(.no-flow):hover {
+    @apply text-black scale-105;
+  }
+
+  a:active, button:not(.no-flow):active {
+    @apply scale-95;
+  }
+
+  /* Ensure text stands out on gold background */
+  a:hover *, button:not(.no-flow):hover * {
+    @apply text-black transition-colors duration-500;
+  }
+  
+  /* Exclude logo and some icons if they shouldn't change color */
+  .no-flow, .no-flow:hover, .no-flow::before {
+    @apply scale-100 translate-x-0 translate-y-0 bg-transparent text-inherit;
+    background-image: none !important;
+  }
+  .no-flow::before { content: none !important; }
+}
+
+.luxury-gradient {
+  background: linear-gradient(to left, #1A1108, transparent);
+}
+
+.luxury-shadow {
+  box-shadow: 0 0 20px rgba(201, 161, 74, 0.3);
+}
+
+.glass-nav {
+  @apply bg-luxury-black/80 backdrop-blur-md border-b border-gold/20;
+}
+
+/* Custom scrollbar for luxury feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-luxury-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gold/20 hover:bg-gold/40 transition-colors;
+}
+
