@@ -41,7 +41,7 @@ class Product(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(255))
     slug: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     description: Mapped[str] = mapped_column(Text)
-    brand: Mapped[str] = mapped_column(String(100), default="Jacinta Atelier")
+    brand: Mapped[str] = mapped_column(String(100), default="JΛCINTΛ Atelier")
     category_id: Mapped[Optional[uuid.UUID]] = mapped_column(ForeignKey("categories.id"))
     base_price: Mapped[float] = mapped_column(DECIMAL(12, 2))
     intensity: Mapped[Optional[str]] = mapped_column(String(50)) # Eau de Parfum, Extrait

@@ -60,7 +60,7 @@ export default function CartPage() {
         key: paymentRes.key_id,
         amount: paymentRes.amount,
         currency: "INR",
-        name: "Jacinta Luxury",
+        name: "JΛCINTΛ Luxury",
         description: "Artisanal Fragrance Acquisition",
         order_id: paymentRes.razorpay_order_id,
         handler: async function (response: any) {

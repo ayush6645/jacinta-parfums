@@ -38,7 +38,7 @@ export default function CollectionsPage() {
             animate={{ opacity: 1 }} 
             className="text-gold text-xs uppercase tracking-[0.4em] mb-4 block"
           >
-            The Jacinta Signature
+            The JΛCINTΛ Signature
           </motion.span>
           <motion.h1 
             initial={{ opacity: 0, y: 10 }} 

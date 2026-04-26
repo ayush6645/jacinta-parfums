@@ -51,7 +51,7 @@ if settings.BACKEND_CORS_ORIGINS:
 @app.get("/")
 def root():
     return {
-        "message": "Welcome to Jacinta Luxury Perfume API",
+        "message": "Welcome to JΛCINTΛ Luxury Perfume API",
         "status": "online",
         "docs": "/docs"
     }

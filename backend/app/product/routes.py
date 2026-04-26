@@ -23,7 +23,7 @@ def get_products(
     db: Session = Depends(get_db)
 ):
     """
-    Explore the Jacinta collection. 
+    Explore the JΛCINTΛ collection. 
     Supports deep filtering by olfactory notes, intensity, and price.
     """
     skip = (page - 1) * limit

@@ -40,7 +40,7 @@ function LandingPage() {
               whileInView={{ opacity: 1 }}
               className="text-gold text-[10px] uppercase tracking-[0.5em] mb-4 block"
             >
-              The Essence of Jacinta
+              The Essence of JΛCINTΛ
             </motion.span>
             <h2 className="text-5xl md:text-6xl font-serif italic mb-16">The Artisanal Philosophy</h2>
             <div className="grid md:grid-cols-3 gap-12 text-left">
@@ -135,7 +135,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 mb-20">
               <div className="max-w-xs text-center md:text-left">
                 <Link to="/" className="text-3xl font-serif tracking-[0.3em] text-gold font-bold mb-6 block">
-                  JACINTA
+                  JΛCINTΛ
                 </Link>
                 <p className="text-[11px] text-luxury-white/30 tracking-tight leading-loose uppercase">
                   The definitive voice of high-contemporary perfumery. Crafting memories through molecular excellence.
@@ -167,7 +167,7 @@ export default function App() {
                 ))}
               </div>
               <p className="text-[9px] text-luxury-white/20 uppercase tracking-[0.3em]">
-                © 2026 Jacinta Parfums. All Rights Reserved.
+                © 2026 JΛCINTΛ Parfums. All Rights Reserved.
               </p>
             </div>
           </div>

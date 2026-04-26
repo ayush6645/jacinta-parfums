@@ -26,10 +26,10 @@ def seed_data():
 
         # 3. Product: Jacinta Royale
         royale = Product(
-            name="Jacinta Royale",
+            name="JΛCINTΛ Royale",
             slug="jacinta-royale",
             description="A majestic blend of saffron and rare oud, crafted for the modern monarch.",
-            brand="Jacinta Atelier",
+            brand="JΛCINTΛ Atelier",
             category_id=floral.id,
             base_price=4500.00,
             intensity="Extrait de Parfum",
@@ -50,7 +50,7 @@ def seed_data():
             name="Velvet Night",
             slug="velvet-night",
             description="The essence of a midnight garden, mysterious and alluring.",
-            brand="Jacinta Atelier",
+            brand="JΛCINTΛ Atelier",
             category_id=woody.id,
             base_price=3800.00,
             intensity="Eau de Parfum",

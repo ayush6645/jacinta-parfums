@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Jacinta Luxury Perfume API"
+    PROJECT_NAME: str = "JΛCINTΛ Luxury Perfume API"
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     

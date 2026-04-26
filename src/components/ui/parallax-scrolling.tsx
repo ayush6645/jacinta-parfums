@@ -144,7 +144,7 @@ export function ParallaxComponent() {
             <img src="/Images/WhatsApp Image 2026-04-13 at 2.06.56 PM.jpeg" loading="eager" data-parallax-layer="2" alt="" className="parallax__layer-img mix-blend-multiply opacity-50" />
             
             <div data-parallax-layer="3" className="parallax__layer-title">
-              <h2 className="parallax__title">JACINTA</h2>
+              <h2 className="parallax__title">JΛCINTΛ</h2>
               <p className="parallax__subtitle">The Art of Olfaction</p>
             </div>
             

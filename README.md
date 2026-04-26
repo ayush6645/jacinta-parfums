@@ -1,4 +1,4 @@
-# Jacinta Luxury Parfums 🧴✨
+# JΛCINTΛ Luxury Parfums 🧴✨
 
 A high-contemporary, production-grade e-commerce platform for artisanal fragrances. Built with a focus on luxury aesthetics, molecular excellence, and seamless commerce orchestration.
 
@@ -60,8 +60,8 @@ npm run dev
 ```
 
 ## 📜 Artisanal Philosophy
-Every line of code in Jacinta is hand-crafted to mirror the precision of our master perfumers. From the molecular structure of our fragrances to the signature verification of our payments, quality is non-negotiable.
+Every line of code in JΛCINTΛ is hand-crafted to mirror the precision of our master perfumers. From the molecular structure of our fragrances to the signature verification of our payments, quality is non-negotiable.
 
 ---
 
-© 2026 Jacinta Parfums. All Rights Reserved.
+© 2026 JΛCINTΛ Parfums. All Rights Reserved.

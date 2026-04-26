@@ -26,7 +26,7 @@ export default function AtelierPage() {
             <div>
               <h3 className="text-2xl font-serif italic mb-6 text-gold">A Sanctuary of Scent</h3>
               <p className="text-luxury-white/40 leading-relaxed font-light">
-                Located in the heart of our botanical gardens, the Jacinta Atelier is where chemistry meets poetry. 
+                Located in the heart of our botanical gardens, the JΛCINTΛ Atelier is where chemistry meets poetry. 
                 Our grand master perfumers work with rare molecules and aged absolutes to craft fragrances that defy convention.
               </p>
             </div>

@@ -15,7 +15,7 @@ export default function Navbar() {
       <nav className="h-20 px-6 md:px-12 flex items-center justify-between glass-nav fixed top-0 left-0 right-0 z-[100] transition-colors duration-700">
         <div className="flex items-center gap-12">
           <Link to="/" className="text-xl md:text-2xl font-serif tracking-[0.2em] text-gold font-bold no-flow" onClick={() => setIsMenuOpen(false)}>
-            JACINTA
+            JΛCINTΛ
           </Link>
           <div className="hidden lg:flex gap-8 text-[11px] uppercase tracking-[0.15em] font-medium text-luxury-white/60">
             <Link to="/collections" className="hover:text-gold transition-colors no-flow">Collections</Link>

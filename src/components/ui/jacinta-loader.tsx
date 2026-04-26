@@ -60,7 +60,7 @@ export const JacintaLoader: React.FC<JacintaLoaderProps> = ({
       
       <div className="absolute z-20 text-center pointer-events-none">
         <span className="text-[12px] md:text-sm tracking-[0.8em] uppercase text-luxury-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-          Jacinta
+          JΛCINTΛ
         </span>
       </div>
     </div>

@@ -30,7 +30,7 @@ export default function Hero() {
             The Art of Olfaction
           </h2>
           <h1 className="text-luxury-white text-5xl md:text-8xl font-serif italic tracking-tighter leading-tight animate-gold-glow">
-            Jacinta <span className="not-italic text-gold/80">Atelier</span>
+            JΛCINTΛ <span className="not-italic text-gold/80">Atelier</span>
           </h1>
         </motion.div>
 

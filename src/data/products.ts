@@ -20,7 +20,7 @@ export const products: Product[] = [
   {
     id: 'noir-libre',
     name: 'Noir Libre',
-    brand: 'Jacinta',
+    brand: 'JΛCINTΛ',
     price: 4499,
     category: 'Woody',
     description: 'An elegant expression of freedom. A sophisticated blend that balances dark intensity with refined grace.',
@@ -37,7 +37,7 @@ export const products: Product[] = [
   {
     id: 'red-desire',
     name: 'Red Desire',
-    brand: 'Jacinta',
+    brand: 'JΛCINTΛ',
     price: 4499,
     category: 'Spicy',
     description: 'Confidence. Power. Attraction. A bold fragrance crafted for deep impressions and long-lasting allure.',
@@ -54,7 +54,7 @@ export const products: Product[] = [
   {
     id: 'summer-ice',
     name: 'Summer Ice',
-    brand: 'Jacinta',
+    brand: 'JΛCINTΛ',
     price: 4499,
     category: 'Fresh',
     description: 'A crisp, cooling sanctuary. Blending aquatic notes with a sharp frozen citrus edge for ultimate freshness.',
@@ -71,7 +71,7 @@ export const products: Product[] = [
   {
     id: 'purple-oud',
     name: 'Purple Oud',
-    brand: 'Jacinta',
+    brand: 'JΛCINTΛ',
     price: 4499,
     category: 'Oud',
     description: 'Rich, Mysterious, Addictive. A unisex masterpiece that explores the dark depths of rare agarwood.',
@@ -86,7 +86,7 @@ export const products: Product[] = [
   {
     id: 'bloom-aura',
     name: 'Bloom Aura',
-    brand: 'Jacinta',
+    brand: 'JΛCINTΛ',
     price: 4499,
     category: 'Floral',
     description: 'Elegant, Radiant, Alluring. A blossoming aura of feminine grace captured in a delicate floral bouquet.',
@@ -101,7 +101,7 @@ export const products: Product[] = [
   {
     id: 'alpha-men',
     name: 'Alpha Men',
-    brand: 'Jacinta',
+    brand: 'JΛCINTΛ',
     price: 499,
     category: 'Woody',
     description: 'Bold. Confident. Unforgettable. A fragrance crafted for excellence, class, and lasting impressions.',
