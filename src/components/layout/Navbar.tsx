@@ -1,21 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingBag, User, Heart, Menu, Sun, Moon, X } from 'lucide-react';
 import { useStore } from '@/src/store/useStore';
 import { cn } from '@/src/lib/utils';
+import { BrandLogo } from '../ui/brand-logo';
 
 
 export default function Navbar() {
   const { cart, user, theme, toggleTheme } = useStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <>
-      <nav className="h-20 px-6 md:px-12 flex items-center justify-between glass-nav fixed top-0 left-0 right-0 z-[100] transition-colors duration-700">
+      <nav className={cn(
+        "h-20 px-6 md:px-12 flex items-center justify-between fixed top-0 left-0 right-0 z-[100] transition-all duration-700",
+        scrolled ? "bg-black/80 backdrop-blur-md border-b border-gold/10" : "bg-transparent"
+      )}>
         <div className="flex items-center gap-12">
-          <Link to="/" className="text-xl md:text-2xl font-serif tracking-[0.2em] text-gold font-bold no-flow" onClick={() => setIsMenuOpen(false)}>
-            JΛCINTΛ
+          <Link to="/" className="no-flow" onClick={() => setIsMenuOpen(false)}>
+            <BrandLogo size="md" color="#D4AF37" className="font-medium" />
           </Link>
           <div className="hidden lg:flex gap-8 text-[11px] uppercase tracking-[0.15em] font-medium text-luxury-white/60">
             <Link to="/collections" className="hover:text-gold transition-colors no-flow">Collections</Link>

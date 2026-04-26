@@ -14,6 +14,7 @@ import AtelierPage from './pages/Atelier';
 import BespokePage from './pages/Bespoke';
 import OrderSuccessPage from './pages/OrderSuccess';
 import { JacintaLoader } from './components/ui/jacinta-loader';
+import { BrandLogo } from './components/ui/brand-logo';
 import { useStore } from './store/useStore';
 import { cn } from './lib/utils';
 import { FlowButton } from './components/ui/flow-hover-button';
@@ -134,8 +135,8 @@ export default function App() {
           <div className="container mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 mb-20">
               <div className="max-w-xs text-center md:text-left">
-                <Link to="/" className="text-3xl font-serif tracking-[0.3em] text-gold font-bold mb-6 block">
-                  JΛCINTΛ
+                <Link to="/" className="mb-6 block no-flow">
+                  <BrandLogo size="md" color="#D4AF37" className="font-bold" />
                 </Link>
                 <p className="text-[11px] text-luxury-white/30 tracking-tight leading-loose uppercase">
                   The definitive voice of high-contemporary perfumery. Crafting memories through molecular excellence.

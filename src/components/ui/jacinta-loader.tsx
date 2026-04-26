@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/src/lib/utils";
+import { BrandLogo } from "./brand-logo";
 
 export interface JacintaLoaderProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: string;
@@ -59,9 +60,7 @@ export const JacintaLoader: React.FC<JacintaLoaderProps> = ({
       </div>
       
       <div className="absolute z-20 text-center pointer-events-none">
-        <span className="text-[12px] md:text-sm tracking-[0.8em] uppercase text-luxury-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-          JΛCINTΛ
-        </span>
+        <BrandLogo size="sm" color="#ffffff" className="font-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
       </div>
     </div>
   );
