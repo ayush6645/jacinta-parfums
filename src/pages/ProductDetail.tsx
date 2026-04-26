@@ -1,9 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
-import { products } from '@/src/data/products';
+import { productService } from '@/src/services/product';
+import { cartService } from '@/src/services/cart';
 import { motion } from 'motion/react';
 import { Heart, ArrowLeft, ShieldCheck, Truck, RefreshCcw } from 'lucide-react';
 import { useStore } from '@/src/store/useStore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/src/lib/utils';
 import { JacintaLoader } from '@/src/components/ui/jacinta-loader';
 import InteractiveHoverButton from '@/src/components/ui/interactive-hover-button';
@@ -11,27 +12,52 @@ import { ImageSwiper } from '@/src/components/ui/image-swiper';
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const product = products.find((p) => p.id === id);
-  const { addToCart, toggleWishlist, wishlist } = useStore();
+  const [product, setProduct] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const { toggleWishlist, wishlist, user } = useStore();
   
-  const [selectedSize, setSelectedSize] = useState(product?.sizes[0] || '100ml');
   const isWishlisted = wishlist.includes(product?.id || '');
 
-  const handleAddToCart = () => {
-    if (!product) return;
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: 1,
-      size: selectedSize,
-      image: product.image
-    });
+  useEffect(() => {
+    async function load() {
+      if (!id) return;
+      setIsLoading(true);
+      try {
+        const res = await productService.getProductDetail(id);
+        setProduct(res);
+        if (res.variants && res.variants.length > 0) {
+          setSelectedVariant(res.variants[0]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch product", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    load();
+  }, [id]);
+
+  const handleAddToCart = async () => {
+    if (!product || !selectedVariant) return;
+    
+    if (!user.isLoggedIn) {
+      alert("Please login to add items to your atelier bag.");
+      return;
+    }
+
+    try {
+      await cartService.addToCart(selectedVariant.id, 1);
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Failed to add to cart");
+    }
   };
+
+  if (isLoading) return <div className="h-screen flex items-center justify-center bg-luxury-black"><JacintaLoader /></div>;
 
   if (!product) {
     return (
-      <div className="pt-40 text-center h-screen">
+      <div className="pt-40 text-center h-screen bg-luxury-black text-luxury-white">
         <h2 className="text-3xl font-serif mb-4 italic">Fragrance Not Found</h2>
         <Link to="/collections" className="text-gold uppercase tracking-widest text-sm">Return to Collections</Link>
       </div>
@@ -93,12 +119,12 @@ export default function ProductDetailPage() {
             <div className="flex justify-between items-start mb-6">
               <div>
                 <span className="text-gold text-xs uppercase tracking-[0.4em] mb-3 block font-semibold italic">
-                  {product.category} Collection
+                  {product.category?.name || 'Signature'} Collection
                 </span>
                 <h1 className="text-5xl md:text-7xl font-serif italic mb-2">{product.name}</h1>
                 <p className="text-luxury-white/40 text-sm uppercase tracking-widest">{product.brand} Parfums</p>
               </div>
-              <div className="text-3xl font-serif text-gold">₹{product.price}</div>
+              <div className="text-3xl font-serif text-gold">₹{selectedVariant?.price || product.base_price}</div>
             </div>
 
             <p className="text-luxury-white/60 text-base leading-relaxed mb-12 max-w-xl font-light">
@@ -107,16 +133,20 @@ export default function ProductDetailPage() {
 
             {/* Fragrance Notes */}
             <div className="grid md:grid-cols-3 gap-8 mb-12 border-y border-gold/10 py-10">
-              {Object.entries(product.notes).map(([type, notes]) => (
-                <div key={type}>
-                  <h4 className="text-[10px] uppercase tracking-[0.3em] text-gold mb-3 font-bold">{type} Notes</h4>
-                  <ul className="space-y-1">
-                    {notes.map((note, i) => (
-                      <li key={i} className="text-xs text-luxury-white/50 italic tracking-wide">{note}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              {['top', 'heart', 'base'].map((type) => {
+                const typeNotes = product.notes?.filter((n: any) => n.type === type);
+                if (!typeNotes || typeNotes.length === 0) return null;
+                return (
+                  <div key={type}>
+                    <h4 className="text-[10px] uppercase tracking-[0.3em] text-gold mb-3 font-bold">{type} Notes</h4>
+                    <ul className="space-y-1">
+                      {typeNotes.map((note: any, i: number) => (
+                        <li key={i} className="text-xs text-luxury-white/50 italic tracking-wide">{note.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Selection & Actions */}
@@ -124,18 +154,18 @@ export default function ProductDetailPage() {
               <div>
                 <h4 className="text-[10px] uppercase tracking-widest text-luxury-white/40 mb-4 font-bold">Select Size</h4>
                 <div className="flex gap-4">
-                  {product.sizes.map((size) => (
+                  {product.variants?.map((v: any) => (
                     <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
+                      key={v.id}
+                      onClick={() => setSelectedVariant(v)}
                       className={cn(
                         "px-8 py-3 text-[10px] uppercase tracking-widest font-bold border transition-all no-flow",
-                        selectedSize === size 
+                        selectedVariant?.id === v.id 
                           ? "border-gold text-gold bg-gold/5" 
                           : "border-gold/10 text-luxury-white/40 hover:border-gold/30 hover:text-luxury-white"
                       )}
                     >
-                      {size}
+                      {v.size_ml}ml
                     </button>
                   ))}
                 </div>

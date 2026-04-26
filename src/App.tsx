@@ -12,6 +12,7 @@ import DemosPage from './pages/Demos';
 import ProfilePage from './pages/Profile';
 import AtelierPage from './pages/Atelier';
 import BespokePage from './pages/Bespoke';
+import OrderSuccessPage from './pages/OrderSuccess';
 import { JacintaLoader } from './components/ui/jacinta-loader';
 import { useStore } from './store/useStore';
 import { cn } from './lib/utils';
@@ -123,6 +124,7 @@ export default function App() {
               <Route path="/login" element={<AuthPage />} />
 
               <Route path="/demos" element={<DemosPage />} />
+              <Route path="/order-success" element={<OrderSuccessPage />} />
 
            </Routes>
 

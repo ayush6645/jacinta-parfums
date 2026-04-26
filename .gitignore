@@ -1,8 +1,46 @@
+# Frontend
 node_modules/
-build/
 dist/
-coverage/
-.DS_Store
-*.log
-.env*
+dist-ssr
+*.local
+.vercel
+.output
+.nuxt
+.next
+.cache
+.env
+.env.*
 !.env.example
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Databases / Local Data
+*.db
+*.sqlite3
+E:/Perfume_Project/
+uploads/
+logs/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

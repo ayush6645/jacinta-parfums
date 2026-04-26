@@ -1,23 +1,163 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useStore } from '@/src/store/useStore';
+import { cartService } from '@/src/services/cart';
+import { orderService } from '@/src/services/order';
+import { paymentService } from '@/src/services/payment';
 import { motion, AnimatePresence } from 'motion/react';
-import { ShoppingBag, Trash2, ChevronRight, CreditCard, MapPin, CheckCircle2, Ticket } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingBag, Trash2, ChevronRight, CreditCard, MapPin, CheckCircle2, Ticket, ShieldCheck, Truck } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
+import { JacintaLoader } from '@/src/components/ui/jacinta-loader';
 
 type CheckoutStep = 'cart' | 'address' | 'payment' | 'review';
 
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart } = useStore();
+  const { user, clearCart } = useStore();
+  const navigate = useNavigate();
+  const [backendCart, setBackendCart] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [step, setStep] = useState<CheckoutStep>('cart');
   const [coupon, setCoupon] = useState('');
   
-  const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const shipping = subtotal > 500 ? 0 : 25;
-  const tax = subtotal * 0.08;
+  // Shipping form state
+  const [address, setAddress] = useState({
+    firstName: '',
+    lastName: '',
+    street: '',
+    city: '',
+    postalCode: ''
+  });
+
+  const handleCheckout = async () => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+
+    try {
+      // 1. Load Razorpay Script
+      const isLoaded = await paymentService.loadRazorpayScript();
+      if (!isLoaded) {
+        throw new Error("Razorpay SDK failed to load. Are you offline?");
+      }
+
+      // 2. Create internal order
+      // We pass the shipping address to the backend
+      const orderRes = await orderService.checkout({
+        shipping_address: `${address.street}, ${address.city}, ${address.postalCode}`,
+        contact_number: "9999999999" // Dummy for now, can be added to form
+      });
+      const orderId = orderRes.id;
+
+      // 3. Create Razorpay order
+      const paymentRes = await paymentService.createRazorpayOrder(orderId);
+      
+      if (!paymentRes.razorpay_order_id) {
+        throw new Error("Payment initialization failed");
+      }
+
+      // 4. Open Razorpay
+      const options = {
+        key: paymentRes.key_id,
+        amount: paymentRes.amount,
+        currency: "INR",
+        name: "Jacinta Luxury",
+        description: "Artisanal Fragrance Acquisition",
+        order_id: paymentRes.razorpay_order_id,
+        handler: async function (response: any) {
+          try {
+            // 5. Verify payment
+            await paymentService.verifyPayment(response);
+            
+            alert("Acquisition confirmed. Your artisanal fragrance is being prepared.");
+            clearCart();
+            navigate('/profile'); // Or success page
+          } catch (err: any) {
+            alert(err.response?.data?.detail || "Payment verification failed");
+          } finally {
+            setIsProcessing(false);
+          }
+        },
+        prefill: {
+          name: `${address.firstName} ${address.lastName}`,
+          email: user.email,
+        },
+        theme: {
+          color: "#C9A14A",
+        },
+        modal: {
+          ondismiss: function () {
+            setIsProcessing(false);
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+
+    } catch (err: any) {
+      alert(err.response?.data?.detail || err.message || "Checkout failed");
+      setIsProcessing(false);
+    }
+  };
+
+  const loadCart = async () => {
+    if (!user.isLoggedIn) {
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const res = await cartService.getCart();
+      setBackendCart(res);
+    } catch (err) {
+      console.error("Failed to load cart", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCart();
+  }, [user.isLoggedIn]);
+
+  const handleUpdateQuantity = async (itemId: string, newQty: number) => {
+    if (newQty < 1) return;
+    try {
+      const res = await cartService.updateQuantity(itemId, newQty);
+      setBackendCart(res);
+    } catch (err) {
+      alert("Failed to update quantity");
+    }
+  };
+
+  const handleRemove = async (itemId: string) => {
+    try {
+      const res = await cartService.removeFromCart(itemId);
+      setBackendCart(res);
+    } catch (err) {
+      alert("Failed to remove item");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-luxury-black">
+        <JacintaLoader />
+      </div>
+    );
+  }
+
+  const items = backendCart?.items || [];
+  
+  const floatValue = (val: any) => {
+    return typeof val === 'string' ? parseFloat(val) : val;
+  };
+
+  const subtotal = items.reduce((acc: number, item: any) => acc + (floatValue(item.variant.price) * item.quantity), 0);
+  const shipping = subtotal > 5000 ? 0 : 250;
+  const tax = subtotal * 0.18;
   const total = subtotal + shipping + tax;
 
-  if (cart.length === 0 && step === 'cart') {
+  if (items.length === 0 && step === 'cart') {
     return (
       <div className="pt-40 px-6 text-center min-h-screen bg-luxury-black">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -55,7 +195,6 @@ export default function CartPage() {
         </header>
 
         <div className="flex flex-col lg:flex-row gap-16">
-          {/* Main Content */}
           <div className="flex-1">
             <AnimatePresence mode="wait">
               {step === 'cart' && (
@@ -66,33 +205,46 @@ export default function CartPage() {
                   exit={{ opacity: 0, x: 20 }}
                   className="space-y-8"
                 >
-                  {cart.map((item) => (
-                    <div key={`${item.id}-${item.size}`} className="flex gap-6 pb-8 border-b border-gold/10 group">
+                  {items.map((item: any) => (
+                    <div key={item.id} className="flex gap-6 pb-8 border-b border-gold/10 group">
                       <div className="w-24 h-32 bg-luxury-dark border border-gold/5 overflow-hidden">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover opacity-80" />
+                        <img 
+                          src={item.variant.product.images?.[0]?.url || "/Images/placeholder.jpg"} 
+                          alt={item.variant.product.name} 
+                          className="w-full h-full object-cover opacity-80" 
+                        />
                       </div>
                       <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
                           <div className="flex justify-between mb-1">
-                            <h3 className="text-lg font-serif italic">{item.name}</h3>
-                            <span className="text-lg font-serif text-gold">₹{item.price}</span>
+                            <h3 className="text-lg font-serif italic">{item.variant.product.name}</h3>
+                            <span className="text-lg font-serif text-gold">₹{item.variant.price}</span>
                           </div>
-                          <span className="text-[10px] uppercase tracking-widest text-luxury-white/30">{item.size}</span>
+                          <span className="text-[10px] uppercase tracking-widest text-luxury-white/30">{item.variant.size_ml}ml</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <div className="flex items-center border border-gold/20">
-                            <button className="px-3 py-1 hover:bg-gold/10 no-flow">-</button>
+                            <button 
+                              onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                              className="px-3 py-1 hover:bg-gold/10 no-flow"
+                            >
+                              -
+                            </button>
                             <span className="px-4 text-xs font-mono">{item.quantity}</span>
-                            <button className="px-3 py-1 hover:bg-gold/10 no-flow">+</button>
+                            <button 
+                              onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                              className="px-3 py-1 hover:bg-gold/10 no-flow"
+                            >
+                              +
+                            </button>
                           </div>
 
                           <button 
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => handleRemove(item.id)}
                             className="text-luxury-white/20 hover:text-red-500 transition-colors no-flow"
                           >
                             <Trash2 size={16} />
                           </button>
-
                         </div>
                       </div>
                     </div>
@@ -122,25 +274,50 @@ export default function CartPage() {
                   <div className="grid grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
                       <label className="text-[10px] uppercase tracking-widest text-luxury-white/40">First Name</label>
-                      <input className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" placeholder="Julian" />
+                      <input 
+                        value={address.firstName}
+                        onChange={(e) => setAddress({...address, firstName: e.target.value})}
+                        className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" 
+                        placeholder="Julian" 
+                      />
                     </div>
                     <div className="flex flex-col gap-2">
                       <label className="text-[10px] uppercase tracking-widest text-luxury-white/40">Last Name</label>
-                      <input className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" placeholder="Vance" />
+                      <input 
+                        value={address.lastName}
+                        onChange={(e) => setAddress({...address, lastName: e.target.value})}
+                        className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" 
+                        placeholder="Vance" 
+                      />
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-[10px] uppercase tracking-widest text-luxury-white/40">Shipping Address</label>
-                    <input className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" placeholder="123 Luxury Lane, Penthouse 4" />
+                    <input 
+                      value={address.street}
+                      onChange={(e) => setAddress({...address, street: e.target.value})}
+                      className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" 
+                      placeholder="123 Luxury Lane, Penthouse 4" 
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
                       <label className="text-[10px] uppercase tracking-widest text-luxury-white/40">City</label>
-                      <input className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" placeholder="New York" />
+                      <input 
+                        value={address.city}
+                        onChange={(e) => setAddress({...address, city: e.target.value})}
+                        className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" 
+                        placeholder="New York" 
+                      />
                     </div>
                     <div className="flex flex-col gap-2">
                       <label className="text-[10px] uppercase tracking-widest text-luxury-white/40">Postal Code</label>
-                      <input className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" placeholder="10001" />
+                      <input 
+                        value={address.postalCode}
+                        onChange={(e) => setAddress({...address, postalCode: e.target.value})}
+                        className="bg-luxury-dark border border-gold/10 p-4 focus:border-gold outline-none text-sm" 
+                        placeholder="10001" 
+                      />
                     </div>
                   </div>
                   <div className="flex justify-between pt-8">
@@ -220,14 +397,11 @@ export default function CartPage() {
                       Please confirm your artisanal selection and shipping details before we begin the hand-pouring process.
                     </p>
                     <button 
-                      onClick={() => {
-                        alert("Order Confirmed! Your artisanal fragrance is being prepared.");
-                        clearCart();
-                        window.location.href = "/";
-                      }}
-                      className="px-16 py-5 bg-gold text-black text-[12px] font-extrabold uppercase tracking-[0.3em] hover:bg-gold-hover transition-all luxury-shadow"
+                      onClick={handleCheckout}
+                      disabled={isProcessing}
+                      className="px-16 py-5 bg-gold text-black text-[12px] font-extrabold uppercase tracking-[0.3em] hover:bg-gold-hover transition-all luxury-shadow disabled:opacity-50"
                     >
-                      Place Secure Order - ₹{total.toFixed(2)}
+                      {isProcessing ? "Processing..." : `Place Secure Order - ₹${total.toFixed(2)}`}
                     </button>
                   </div>
                 </motion.div>
@@ -235,7 +409,6 @@ export default function CartPage() {
             </AnimatePresence>
           </div>
 
-          {/* Sidebar Summary */}
           <aside className="w-full lg:w-[400px]">
             <div className="p-8 border border-gold/10 bg-luxury-dark/40 sticky top-32">
               <h3 className="text-xl font-serif italic mb-8 border-b border-gold/10 pb-4">Order Summary</h3>
@@ -288,5 +461,3 @@ export default function CartPage() {
     </div>
   );
 }
-
-import { ShieldCheck, Truck } from 'lucide-react';

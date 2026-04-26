@@ -6,24 +6,51 @@ import { cn } from '@/src/lib/utils';
 import { useStore } from '@/src/store/useStore';
 import { FlowButton } from '@/src/components/ui/flow-hover-button';
 
+import { authService } from '@/src/services/auth';
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [showOtp, setShowOtp] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
-  const [email, setEmail] = useState('julian@aurelian.com');
+  const [email, setEmail] = useState('test@jacinta.com');
   const [password, setPassword] = useState('password123');
-  const [name, setName] = useState('Julian Vance');
+  const [firstName, setFirstName] = useState('Test');
+  const [lastName, setLastName] = useState('User');
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
   const setUser = useStore((state) => state.setUser);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!isLogin && !showOtp) {
-      setShowOtp(true);
-      return;
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      if (isLogin) {
+        const res = await authService.login({ email, password });
+        setUser({ email, name: res.user?.name || email, isLoggedIn: true });
+        navigate('/profile');
+      } else {
+        // Registration Logic
+        if (!showOtp) {
+          // For now, let's skip the front-end OTP UI and just register
+          // In a real flow, you'd verify email first.
+          const res = await authService.register({ 
+            email, 
+            password, 
+            name: `${firstName} ${lastName}`.trim() 
+          });
+          setIsLogin(true);
+          setError("Registration successful! Please sign in.");
+        }
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.detail || "An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    setUser({ email, name });
-    navigate('/profile');
   };
 
   return (
@@ -50,6 +77,15 @@ export default function AuthPage() {
           </p>
         </div>
 
+        {error && (
+          <div className={cn(
+            "p-4 mb-6 text-[10px] uppercase tracking-widest border",
+            error.includes("successful") ? "bg-green-500/10 border-green-500/20 text-green-500" : "bg-red-500/10 border-red-500/20 text-red-500"
+          )}>
+            {error}
+          </div>
+        )}
+
         <form className="space-y-6" onSubmit={handleSubmit}>
           {!isLogin && !showOtp && (
             <div className="grid grid-cols-2 gap-4">
@@ -58,6 +94,8 @@ export default function AuthPage() {
                 <input 
                   type="text"
                   placeholder="Julian"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="w-full bg-black/40 border border-gold/10 p-4 focus:border-gold outline-none transition-colors text-sm"
                   required
                 />
@@ -67,6 +105,8 @@ export default function AuthPage() {
                 <input 
                   type="text"
                   placeholder="Vance"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="w-full bg-black/40 border border-gold/10 p-4 focus:border-gold outline-none transition-colors text-sm"
                   required
                 />
@@ -174,10 +214,11 @@ export default function AuthPage() {
 
           <button 
             type="submit"
-            className="w-full bg-gold text-black py-5 text-[11px] font-bold uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(201,161,74,0.2)] hover:bg-gold-hover transition-all flex items-center justify-center gap-3 no-flow"
+            disabled={isLoading}
+            className="w-full bg-gold text-black py-5 text-[11px] font-bold uppercase tracking-[0.3em] shadow-[0_0_20px_rgba(201,161,74,0.2)] hover:bg-gold-hover transition-all flex items-center justify-center gap-3 no-flow disabled:opacity-50"
           >
-            {isLogin ? 'Enter Atelier' : (showOtp ? 'Confirm Identity' : 'Register & Verify')}
-            <ArrowRight size={14} />
+            {isLoading ? 'Processing...' : (isLogin ? 'Enter Atelier' : (showOtp ? 'Confirm Identity' : 'Register & Verify'))}
+            {!isLoading && <ArrowRight size={14} />}
           </button>
         </form>
 

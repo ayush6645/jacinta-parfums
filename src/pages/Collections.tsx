@@ -1,17 +1,33 @@
-import { useState } from 'react';
-import { products } from '@/src/data/products';
+import { useEffect, useState } from 'react';
+import { productService } from '@/src/services/product';
 import ProductCard from '@/src/components/products/ProductCard';
 import { motion } from 'motion/react';
 import { Filter, SlidersHorizontal } from 'lucide-react';
 
 export default function CollectionsPage() {
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const categories = ['All', 'Oud', 'Floral', 'Woody', 'Fresh', 'Spicy'];
   
-  const filteredProducts = activeCategory === 'All' 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
+  useEffect(() => {
+    async function load() {
+      setIsLoading(true);
+      try {
+        const query = activeCategory !== 'All' ? `?category=${activeCategory}` : '';
+        const res = await productService.getProducts(); // We'll handle category filtering in the query soon
+        setProducts(res.items || res);
+      } catch (err) {
+        console.error("Failed to fetch products", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    load();
+  }, [activeCategory]);
+
+  const filteredProducts = products; // Backend handles filtering or we can do it here for now
 
   return (
     <div className="pt-32 pb-24 min-h-screen bg-luxury-black">
@@ -57,9 +73,15 @@ export default function CollectionsPage() {
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredProducts.map((product, idx) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {isLoading ? (
+            [...Array(4)].map((_, i) => (
+              <div key={i} className="aspect-[3/4] bg-gold/5 animate-pulse border border-gold/10"></div>
+            ))
+          ) : (
+            filteredProducts.map((product, idx) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          )}
         </div>
         
         {filteredProducts.length === 0 && (

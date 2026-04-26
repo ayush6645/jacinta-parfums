@@ -1,16 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useStore } from '@/src/store/useStore';
+import { orderService } from '@/src/services/order';
 import { motion } from 'motion/react';
 import { User, Package, MapPin, Settings, LogOut, ChevronRight, Star } from 'lucide-react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { Modal } from '@/src/components/ui/modal';
 import { FlowButton } from '@/src/components/ui/flow-hover-button';
+import { JacintaLoader } from '@/src/components/ui/jacinta-loader';
 
 export default function ProfilePage() {
   const { user, logout } = useStore();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Profile Details');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (activeTab === 'Order History' && user.isLoggedIn) {
+      loadOrders();
+    }
+  }, [activeTab]);
+
+  const loadOrders = async () => {
+    setIsLoading(true);
+    try {
+      const res = await orderService.getOrders();
+      setOrders(res);
+    } catch (err) {
+      console.error("Failed to load orders", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!user.isLoggedIn) {
     return <Navigate to="/login" />;
@@ -18,13 +40,9 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     logout();
+    localStorage.removeItem('token');
     navigate('/');
   };
-
-  const orders = [
-    { id: 'ORD-2938', date: '22 Apr 2026', status: 'In Transit', total: '₹4,499', item: 'Noir Libre' },
-    { id: 'ORD-1049', date: '10 Mar 2026', status: 'Delivered', total: '₹4,499', item: 'Summer Ice' },
-  ];
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -33,36 +51,56 @@ export default function ProfilePage() {
           <section>
             <div className="flex justify-between items-center mb-8 border-b border-gold/10 pb-4">
               <h3 className="text-xl font-serif italic">Recent Acquisitions</h3>
-              <button className="text-[10px] uppercase tracking-widest text-luxury-white/40 hover:text-gold transition-colors no-flow">Filter by Date</button>
+              <button 
+                onClick={loadOrders}
+                className="text-[10px] uppercase tracking-widest text-luxury-white/40 hover:text-gold transition-colors no-flow"
+              >
+                Refresh
+              </button>
             </div>
-            <div className="space-y-4">
-              {orders.map((order) => (
-                <div key={order.id} className="p-6 border border-gold/5 bg-luxury-dark/20 hover:border-gold/20 transition-all group">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-center gap-6">
-                      <div className="w-16 h-20 bg-black border border-gold/10 overflow-hidden flex-shrink-0">
-                         <div className="w-full h-full bg-gradient-to-br from-gold/20 to-black opacity-50 flex items-center justify-center">
-                           <Package size={20} className="text-gold/40" />
-                         </div>
+            
+            {isLoading ? (
+              <div className="flex justify-center py-20"><JacintaLoader /></div>
+            ) : orders.length === 0 ? (
+              <div className="text-center py-20 border border-dashed border-gold/10">
+                <p className="text-luxury-white/20 font-serif italic">No acquisitions yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {orders.map((order) => (
+                  <div key={order.id} className="p-6 border border-gold/5 bg-luxury-dark/20 hover:border-gold/20 transition-all group">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-20 bg-black border border-gold/10 overflow-hidden flex-shrink-0">
+                          <img 
+                            src={order.items?.[0]?.variant?.product?.images?.[0]?.url || "/Images/placeholder.jpg"} 
+                            alt="Fragrance" 
+                            className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" 
+                          />
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold uppercase tracking-widest text-luxury-white group-hover:text-gold transition-colors">
+                            {order.items?.[0]?.variant?.product?.name} {order.items?.length > 1 ? `+ ${order.items.length - 1} more` : ''}
+                          </div>
+                          <div className="text-[10px] text-luxury-white/40 mt-1 uppercase tracking-tighter">
+                            {order.order_number} • {new Date(order.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-sm font-bold uppercase tracking-widest text-luxury-white group-hover:text-gold transition-colors">{order.item}</div>
-                        <div className="text-[10px] text-luxury-white/40 mt-1 uppercase tracking-tighter">{order.id} • {order.date}</div>
+                      <div className="flex items-center justify-between md:justify-end gap-12">
+                        <div className="text-right">
+                          <div className="text-sm font-serif">₹{order.total_amount}</div>
+                          <div className="text-[9px] uppercase tracking-widest text-gold mt-1 font-bold">{order.status}</div>
+                        </div>
+                        <button className="p-3 border border-gold/10 hover:border-gold/30 transition-colors no-flow">
+                          <ChevronRight size={14} className="text-luxury-white/40 group-hover:text-gold transition-colors" />
+                        </button>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between md:justify-end gap-12">
-                      <div className="text-right">
-                        <div className="text-sm font-serif">{order.total}</div>
-                        <div className="text-[9px] uppercase tracking-widest text-gold mt-1">{order.status}</div>
-                      </div>
-                      <button className="p-3 border border-gold/10 hover:border-gold/30 transition-colors no-flow">
-                        <ChevronRight size={14} className="text-luxury-white/40 group-hover:text-gold transition-colors" />
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
         );
       case 'Shipping Addresses':
